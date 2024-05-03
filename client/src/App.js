@@ -84,7 +84,6 @@ function App() {
                 // Handle input change for new user (if needed)
               }}
             />
-//gamers
             <input
               type="text"
               placeholder="Password"
