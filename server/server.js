@@ -3,11 +3,15 @@ const app = express();
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
+const fs = require('fs');
+
 
 
 app.use(cors());
 
 const server = http.createServer(app);
+const userDataFilePath = 'userdata.json';
+
 
 const io = new Server(server, {
   cors: {
@@ -15,22 +19,35 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-//gamers
-let users = [];
-let pass = [];
+
+
+const cash = 5000;
 let numUsers = 0;
 
 
-function userExists(username) {
-  for (let i = 0; i < users.length; i++) {
-    if (users[i] === username) {
-      return true; // User exists
-    }
+let userData = loadUserData();
+
+function loadUserData() {
+  try {
+    // Read user data from file
+    const data = fs.readFileSync(userDataFilePath, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    return [];
   }
-  return false; // User does not exist
 }
 
-// Socket.io events
+function saveUserData() {
+  // Write user data to file
+  const userDataString = userData.map(user => JSON.stringify(user)).join(',\n') + '\n';
+  const jsonContent = `[${userDataString}]`;
+  fs.writeFileSync(userDataFilePath, jsonContent, 'utf8');
+}
+
+function userExists(username) {
+  return userData.some(user => user.username === username);
+}
+
 io.on('connection', (socket) => {
     console.log('A user connected');
 
@@ -39,12 +56,13 @@ io.on('connection', (socket) => {
         io.emit('userExists', username);
       } else { 
         numUsers++;
-        users.push(username);
-        pass.push(password);
+        userData.push({ username, password, cash });
+        saveUserData(); 
         console.log('User connected successfully');
         console.log(numUsers);
-        console.log(users[numUsers - 1]); // Corrected index from 'numUsers' to 'numUsers - 1'
-        console.log(pass[numUsers - 1]); // Corrected index from 'numUsers' to 'numUsers - 1'
+        console.log('User connected successfully');
+        console.log(userData);
+        io.emit('loggedIn', { userData: userData });
 
       }
     });
@@ -57,3 +75,4 @@ io.on('connection', (socket) => {
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
 });
+

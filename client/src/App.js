@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import io from 'socket.io-client';
+import Menu from './menu';
 
 const socket = io.connect("http://localhost:3001");
 
@@ -8,12 +9,13 @@ function App() {
   const [screen, setScreen] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showUserExistsAlert, setShowUserExistsAlert] = useState(false); // State to control alert visibility
+  const [showUserExistsAlert, setShowUserExistsAlert] = useState(false);
 
-  socket.on('userExists', (existingUsername) => {
-    console.log(`User '${existingUsername}' already exists!`);
-    setShowUserExistsAlert(true); // Set state to display the alert
-  });
+  useEffect(() => {
+    socket.on('loggedIn', () => {
+      setScreen('loggedInScreen');
+    });
+  }, []);
 
   const handleNewUserClick = () => {
     setScreen('newUser');
@@ -29,19 +31,25 @@ function App() {
 
   const handleNewUser = () => {
     console.log('A user connected');
-    // Emit username and password when login button is pressed
     socket.emit("newUser", { username, password });
+  
+    socket.on('userExists', () => {
+      setShowUserExistsAlert(true); // Set the state to show the alert
+   });
   };
+
 
   return (
     <div className="App">
       <header className="App-header">
+
         {screen === null && (
           <div>
             <button onClick={handleNewUserClick}>New User</button>
             <button onClick={handleCurrentUserClick}>Current User</button>
           </div>
         )}
+
         {screen === 'newUser' && (
           <div>
             <h2>Login In</h2>
@@ -63,7 +71,7 @@ function App() {
 
             <button onClick={handleNewUser}>Login</button>
             
-            {/* Display alert if user exists */}
+          
             {showUserExistsAlert && (
               <div className="alert">
                 User already exists!
@@ -72,6 +80,7 @@ function App() {
             )}
           </div>
         )}
+
         {screen === 'currentUser' && (
           <div>
             <h2>Gamers</h2>
@@ -81,18 +90,22 @@ function App() {
               type="text"
               placeholder="Username"
               onChange={(event) => {
-                // Handle input change for new user (if needed)
+                
               }}
             />
             <input
               type="text"
               placeholder="Password"
               onChange={(event) => {
-                // Handle input change for new pass (if needed)
+               
               }}
             />
+          </div>
+        )}
 
-            {/* Add logic for registering a new user (if needed) */}
+        {screen === 'loggedInScreen' && (
+          <div className="menu-container">
+            <Menu />
           </div>
         )}
       </header>
