@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import io from 'socket.io-client';
-import Menu from './loadingMenu';
+import Menu from './Menu';
 
 const socket = io.connect("http://localhost:3001");
 
@@ -13,7 +13,9 @@ function App() {
   const [showUserNotExistsAlert, setShowUserNotExistsAlert] = useState(false);
 
   useEffect(() => {
-    socket.on('loggedIn', () => {
+    socket.on('loggedIn', (userData) => {
+    
+    
       setScreen('loggedInScreen');
     });
   }, []);
@@ -41,11 +43,15 @@ function App() {
 
   const handleCurrentUser = () => {
     console.log('A user connected');
+    console.log('Username:', username); // Log the username
+    console.log('Password:', password); // Log the password
+    
+
     socket.emit("currentUser", { username, password });
   
     socket.on('userNotExist', () => {
       setShowUserNotExistsAlert(true); // Set the state to show the alert
-   });
+    });
   };
 
 
@@ -124,7 +130,8 @@ function App() {
 
         {screen === 'loggedInScreen' && (
           <div className="menu-container">
-            <Menu />
+          
+            <Menu socket={socket} username={username}/> {/* Pass userData as prop to Menu */}
           </div>
         )}
       </header>

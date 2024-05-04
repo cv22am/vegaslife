@@ -1,0 +1,102 @@
+/* Menu.css */
+
+/* Add styles for the leaderboard */
+.leaderboard-container {
+  margin-top: 60px; /* Adjusted to accommodate the fixed navigation bar */
+  padding: 20px;
+  width: 80%; /* Adjusted to 100% - 20% */
+  margin-left: 20%; /* Adjusted to match the width of the persistent section */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+/* End of leaderboard styles */
+
+nav {
+  background-color: #333;
+  padding: 20px 0;
+  text-align: center;
+  position: fixed;
+  width: 80%; 
+  top: 0;
+  right: 0; 
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+li {
+  margin-right: 10px;
+}
+
+li:last-child {
+  margin-right: 0;
+}
+
+li button {
+  background-color: #ddd;
+  border: none;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+li button:hover {
+  background-color: #bbb;
+}
+
+.persistent-section {
+  position: fixed;
+  width: 20%; /* Reduce the width by 15% */
+  height: 100%; /* Full height */
+  top: 0;
+  left: 0; /* Align to the left */
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+.persistent-section img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.content-section {
+  margin-top: 60px; /* Adjusted to accommodate the fixed navigation bar */
+  padding: 20px;
+  width: 80%; /* Adjusted to 100% - 20% */
+  margin-left: 20%; /* Adjusted to match the width of the persistent section */
+  text-align: center; /* Center-align the text */
+}

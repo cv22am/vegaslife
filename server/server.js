@@ -70,12 +70,34 @@ io.on('connection', (socket) => {
     socket.on('currentUser', ({ username, password }) => {
       const user = userData.find(user => user.username === username && user.password === password);
       if (user) {
-        io.emit('loggedIn', { userData: userData });
+        io.emit('loggedIn', { userData: [user] }); // Emit only the found user data
       } else {
         console.log('User does not exist or password is incorrect');
         io.emit('userNotExist', { userData: userData });
       }
     });
+
+    socket.on('userInfo', ({ username }) => {
+      const user = userData.find(user => user.username === username);
+      if (user) {
+        // Emit the cash value only
+        io.emit('returnInfo', { cash: user.cash });
+      } else {
+        console.log('User does not exist or password is incorrect');
+        io.emit('userNotExist', { userData: userData });
+      }
+    });
+    
+    socket.on('leaderboard', () => {
+      const sortedUsers = userData.sort((a, b) => b.cash - a.cash);
+      const usernames = sortedUsers.map(user => user.username);
+      const cashValues = sortedUsers.map(user => user.cash);
+      
+      io.emit('leaderboardData', { usernames, cashValues }); // Emit as an object
+    });
+    
+    
+    
     
 
     socket.on('disconnect', () => {

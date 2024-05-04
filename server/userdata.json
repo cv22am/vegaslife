@@ -1,8 +1,10 @@
-[{"username":"gamer","password":"gamer","cash":5000},
-{"username":"gamer3","password":"gamer","cash":5000},
-{"username":"lol","password":"lol","cash":5000},
+[{"username":"gamer","password":"gamer","cash":5100},
+{"username":"gamer3","password":"gamer","cash":5090},
+{"username":"lol","password":"lol","cash":5800},
 {"username":"s","password":"s","cash":5000},
-{"username":"t","password":"t","cash":5000},
+{"username":"t","password":"t","cash":50000},
 {"username":"l","password":"l","cash":5000},
-{"username":"f","password":"f","cash":5000}
+{"username":"f","password":"f","cash":10},
+{"username":"ryan","password":"ryan","cash":1102000},
+{"username":"a","password":"a","cash":5000}
 ]
