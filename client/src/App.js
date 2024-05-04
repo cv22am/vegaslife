@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import io from 'socket.io-client';
-import Menu from './menu';
+import Menu from './loadingMenu';
 
 const socket = io.connect("http://localhost:3001");
 
@@ -10,6 +10,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showUserExistsAlert, setShowUserExistsAlert] = useState(false);
+  const [showUserNotExistsAlert, setShowUserNotExistsAlert] = useState(false);
 
   useEffect(() => {
     socket.on('loggedIn', () => {
@@ -35,6 +36,15 @@ function App() {
   
     socket.on('userExists', () => {
       setShowUserExistsAlert(true); // Set the state to show the alert
+   });
+  };
+
+  const handleCurrentUser = () => {
+    console.log('A user connected');
+    socket.emit("currentUser", { username, password });
+  
+    socket.on('userNotExist', () => {
+      setShowUserNotExistsAlert(true); // Set the state to show the alert
    });
   };
 
@@ -89,17 +99,26 @@ function App() {
             <input
               type="text"
               placeholder="Username"
-              onChange={(event) => {
-                
-              }}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
             />
+
             <input
               type="text"
               placeholder="Password"
-              onChange={(event) => {
-               
-              }}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
+
+            <button onClick={handleCurrentUser}>Login</button>
+
+            {showUserNotExistsAlert && (
+              <div className="alert">
+                User does not exist or password is incorrect
+                <button onClick={() => setShowUserNotExistsAlert(false)}>Close</button>
+              </div>
+            )}
+
           </div>
         )}
 

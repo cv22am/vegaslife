@@ -67,6 +67,17 @@ io.on('connection', (socket) => {
       }
     });
 
+    socket.on('currentUser', ({ username, password }) => {
+      const user = userData.find(user => user.username === username && user.password === password);
+      if (user) {
+        io.emit('loggedIn', { userData: userData });
+      } else {
+        console.log('User does not exist or password is incorrect');
+        io.emit('userNotExist', { userData: userData });
+      }
+    });
+    
+
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
