@@ -1,19 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Menu.css';
+import { quotes } from './StaticArrays/qoutes.js';
+import { images } from './StaticArrays/images.js';
 
 function Menu({ socket, username }) {
-  const quotes = [
-    "The best throw of the dice is to throw them away.",
-    "The only way to win at gambling is to wear a fake mustache.",
-    // Add more quotes...
-  ];
-
-  const images = [
-    "https://davidmcelroy.org/wp-content/uploads/2012/01/Three-feet-from-gold.jpg",
-    "https://www.shutterstock.com/image-photo/french-bulldogs-playing-cards-260nw-1141633661.jpg",
-    // Add more images...
-  ];
-
   const [currentPage, setCurrentPage] = useState('leaderboard');
   const [randomQuote] = useState(getRandomItem(quotes));
   const [randomImage] = useState(getRandomItem(images));
@@ -56,16 +46,21 @@ function Menu({ socket, username }) {
     <div>
       <nav>
         <ul>
-          <li><button onClick={() => handleNavigation('leaderboard')}>leaderboard</button></li>
-          <li><button onClick={() => handleNavigation('about')}>About</button></li>
-          <li><button onClick={() => handleNavigation('contact')}>Contact</button></li>
+          <li><button onClick={() => handleNavigation('leaderboard')}>Leaderboard</button></li>
+          <li><button onClick={() => handleNavigation('about')}>Games</button></li>
+          <li><button onClick={() => handleNavigation('contact')}>Help</button></li>
         </ul>
       </nav>
       <div className="persistent-section">
+      <h2>Image of the day:</h2>
         <img src={randomImage} alt="Random Image" />
+        <h2>Quote of the day:</h2>
         <p>{randomQuote}</p>
-        <p>Username: {username}</p>
-        <p>Cash: {cash}</p>
+        <h2>Profile</h2>
+        <p><strong>Username:</strong> {username}</p>
+        <p><strong>Cash:</strong> {cash}</p>
+        <p><strong>Leaderboard Standing:</strong> tbd</p>
+        <p><strong>Number of games played:</strong> tbd</p>
       </div>
       <div className="content-section">
         {currentPage === 'leaderboard' && <Leaderboard usernames={usernames} cashValues={cashValues} />}

@@ -96,9 +96,6 @@ io.on('connection', (socket) => {
       io.emit('leaderboardData', { usernames, cashValues }); // Emit as an object
     });
     
-    
-    
-    
 
     socket.on('disconnect', () => {
         console.log('User disconnected');
